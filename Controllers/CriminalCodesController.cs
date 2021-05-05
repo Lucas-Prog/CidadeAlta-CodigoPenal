@@ -24,12 +24,12 @@ namespace CidadeAlta_CodigoPenal.Controllers
         }
 
         /// <summary>
-        /// Rota Get de CriminalCodes
+        /// Retorna todos os CriminalCodes Registrados no Banco ou alguns dependendo dos parametros passados
         /// </summary>
-        /// <param name="orderBy">Campo a ser ordenado</param>
+        /// <param name="orderBy">Campo que será ordenado(Ordem Crescente)</param>
         /// <param name="pagFilter">pagFilter Recebe os valores PageNumber e PageSize, para realizar a paginação</param>
-        /// <param name="filter">Filter recebe um parametro onde para pesquisa individual, o valor passado deve ser da seguinte forma: 
-        /// 'campo'_'valor', onde 'campo' é parametro/index e 'valor' o parametro a ser pesquisado.  </param>
+        /// <param name="filter">Retorna os resultados do banco que tenham o valor passado. Deve ser informado também qual campo a ser pesquisado.
+        /// Exemplo: 'Name_Roberto'. Onde [Name] é o campo a ser pesquisado e [Roberto] o valor a ser pesquisado</param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
@@ -88,7 +88,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return Ok(new Pagination<List<ResponseCriminalCode>>(pagedData, validFilter.PageNumber, validFilter.PageSize, totalRecord));
         }
 
-        // GET: api/CriminalCodes/5
+        /// <summary>
+        /// Retorna um CriminalCode, com base em seu Id
+        /// </summary>
+        /// <param name="id">Id do CriminalCode</param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<CriminalCode>> GetCriminalCode(int id)
@@ -103,8 +107,12 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return criminalCode;
         }
 
-        // PUT: api/CriminalCodes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Edita um CriminalCode ja criado no Banco de Dados
+        /// </summary>
+        /// <param name="id">Id do CriminalCode a ser editado</param>
+        /// <param name="criminalCode">Valore do Criminal Code</param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCriminalCode(int id, CriminalCode criminalCode)
@@ -135,8 +143,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return NoContent();
         }
 
-        // POST: api/CriminalCodes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Cria um CriminalCode
+        /// </summary>
+        /// <param name="criminalCode">CriminalCode a ser Criado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<CriminalCode>> PostCriminalCode(CriminalCode criminalCode)
@@ -144,12 +155,15 @@ namespace CidadeAlta_CodigoPenal.Controllers
             _context.CriminalCodes.Add(criminalCode);
             await _context.SaveChangesAsync();
             var response = CreatedAtAction("GetCriminalCode", new { id = criminalCode.Id }, criminalCode);
-            //var responseData = CreatedAtAction();
 
             return response;
         }
 
-        // DELETE: api/CriminalCodes/5
+        /// <summary>
+        /// Deleta um CriminalCode
+        /// </summary>
+        /// <param name="id">Id do CriminalCode a ser Deletado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCriminalCode(int id)

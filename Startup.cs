@@ -17,6 +17,8 @@ using CidadeAlta_CodigoPenal.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Reflection;
+using System.IO;
 
 namespace CidadeAlta_CodigoPenal
 {
@@ -41,6 +43,37 @@ namespace CidadeAlta_CodigoPenal
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CidadeAlta_CodigoPenal", Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization Scheme. You can get your token in login endpoint.
+                                   Enter 'Bearer' [SPACE] and the your token. 
+                                   Exemple: 'Bearer your_token'.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
+                });
             });
 
             var key = Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]);
@@ -61,22 +94,6 @@ namespace CidadeAlta_CodigoPenal
                };
 
            });
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            //{
-                //opt.TokenValidationParameters = new TokenValidationParameters
-                //{
-                //    ValidateIssuer = false,
-                //    ValidateAudience = false,
-                //    ValidateLifetime = true,
-                //    ValidateIssuerSigningKey = true,
-
-                //    ValidIssuer = Configuration["Jwt:Issuer"],
-                //    ValidAudience = Configuration["Jwt:Audience"],
-                //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                //};
-            //});
-
             services.AddSingleton<IConfiguration>(Configuration);
         }
 

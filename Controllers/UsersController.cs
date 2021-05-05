@@ -17,7 +17,7 @@ using System.Net;
 
 namespace CidadeAlta_CodigoPenal.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -29,7 +29,10 @@ namespace CidadeAlta_CodigoPenal.Controllers
             _config = configuration;
         }
 
-        // GET: api/Users
+        /// <summary>
+        /// Retorno Todos os Users registrados no Banco de Dados
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
@@ -37,7 +40,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Users/5
+        /// <summary>
+        /// Retorna um User com base em seu Id
+        /// </summary>
+        /// <param name="id">Id do user a ser pesquisado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
@@ -52,8 +59,12 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Edita um User ja criado no Banco de Dados
+        /// </summary>
+        /// <param name="id">Id do User a ser editado</param>
+        /// <param name="user">Dados do User</param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
@@ -84,8 +95,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Cria um Novo User no Banco de Dados
+        /// </summary>
+        /// <param name="user">User a ser Criado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
@@ -96,7 +110,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Users/5
+        /// <summary>
+        /// Deleta um User com base em seu Id
+        /// </summary>
+        /// <param name="id">Id do user a ser Deletado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -118,7 +136,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-
+        /// <summary>
+        /// Retorna um token JWT para acesso aos demais endpoints, caso o usuário esteja registrado no Banco de Dados
+        /// </summary>
+        /// <param name="loginDetails">Dados para o Login</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Login")]
         public IActionResult Login([FromBody]User loginDetails)

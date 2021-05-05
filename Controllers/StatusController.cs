@@ -22,7 +22,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             _context = context;
         }
 
-        // GET: api/Status
+        /// <summary>
+        /// Retorna todos os Status do Banco
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Status>>> GetStatus([FromServices] CriminalCodeContext context)
@@ -32,7 +36,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return status;
         }
 
-        // GET: api/Status/5
+        /// <summary>
+        /// Retorno um Status, com base em seu Id
+        /// </summary>
+        /// <param name="id">Id do Status a ser Pesquisado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Status>> GetStatus(int id)
@@ -47,8 +55,12 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return status;
         }
 
-        // PUT: api/Status/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Edita um Status ja criado no Banco de Dados
+        /// </summary>
+        /// <param name="id">Id do Status a ser editado</param>
+        /// <param name="status">Valores do "novo" Status</param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStatus(int id, Status status)
@@ -79,8 +91,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return NoContent();
         }
 
-        // POST: api/Status
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Cria um novo Status
+        /// </summary>
+        /// <param name="status">Status a ser criado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<Status>> PostStatus(Status status)
@@ -91,7 +106,11 @@ namespace CidadeAlta_CodigoPenal.Controllers
             return CreatedAtAction("GetStatus", new { id = status.Id }, status);
         }
 
-        // DELETE: api/Status/5
+        /// <summary>
+        /// Deleta um Status com base em seu Id
+        /// </summary>
+        /// <param name="id">Id do Status a ser Deletado</param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStatus(int id)
